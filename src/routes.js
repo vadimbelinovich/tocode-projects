@@ -5,7 +5,7 @@ import Router from "vue-router";
 Vue.use(Router);
 
 // Pages
-import Home from "@/pages/Home";
+import Modals from "@/pages/Modals";
 import NotFound from "@/pages/404";
 import Notes from "@/pages/Notes";
 
@@ -15,8 +15,8 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: Home
+      name: "Modals",
+      component: Modals
     },
     {
       path: "/notes",

@@ -5,31 +5,41 @@
         <h1>Notes Page</h1>
 
         <!-- message -->
-        <message v-if="message" :message="message" />
+        <message 
+          v-if="message" 
+          :message="message" />
 
         <!-- new note -->
         <newNote />
 
         <div class="note-header" style="margin: 36px 0;">
           <h1>{{ title }}</h1>
-          <search
-            :value="search"
-            placeholder="Find a note 1"
-            @search="search = $event"
-          />
+          <search 
+            :value='search' 
+            placeholder='Find a note' 
+            @search='search = $event'/>
 
           <div class="icons">
-            <span :class="{ active: grid }" @click="grid = true"> </span>
-            <span :class="{ active: !grid }" @click="grid = false"> </span>
+            <span 
+              :class="{active: grid}" 
+              @click="grid = true">
+            </span>
+            <span 
+              :class="{active: !grid}" 
+              @click="grid = false">
+            </span>
           </div>
         </div>
 
         <!-- note list -->
-        <notes :notes="notesFilter" :grid="grid" />
+        <notes 
+          :notes="notesFilter" 
+          :grid="grid" />
       </div>
     </section>
   </div>
 </template>
+
 
 <script>
 import message from "@/components/Message.vue";
@@ -53,13 +63,13 @@ export default {
   },
   created() {
     this.title = this.$store.getters.getTitle;
-    this.notes = this.$store.getters.getNoteList;
+    this.notes = this.$store.getters.getNoteList
   },
   computed: {
     notesFilter() {
       let array = this.notes,
-        search = this.search;
-      if (!search) return array;
+          search = this.search
+      if(!search) return array
       search = search.trim().toLowerCase();
       array = array.filter(function(item) {
         if (item.title.toLowerCase().indexOf(search) !== -1) {

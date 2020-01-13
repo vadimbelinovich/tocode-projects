@@ -28,6 +28,7 @@
 
         <button class="btn btnPrimary">Submit</button>
       </form>
+      <p class="changeModal" @click="getRegisterModal">Мне нужен аккаунт</p>
     </div>
   </modal>
 </template>
@@ -71,6 +72,12 @@ export default {
         this.$v.$reset();
         this.$emit("close");
       }
+    },
+    getRegisterModal() {
+      this.$store.dispatch("setModalView", null);
+      setTimeout(() => {
+        this.$store.dispatch("setModalView", "register");
+      }, 300);
     }
   }
 };

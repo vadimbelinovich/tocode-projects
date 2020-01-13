@@ -65,6 +65,7 @@
         <!-- button -->
         <button class="btn btnPrimary">Submit!</button>
       </form>
+      <p class="changeModal" @click="getLoginModal">У меня есть аккаунт</p>
     </div>
   </modal>
 </template>
@@ -126,6 +127,12 @@ export default {
     },
     onClose() {
       this.$emit("close");
+    },
+    getLoginModal() {
+      this.$store.dispatch("setModalView", null);
+      setTimeout(() => {
+        this.$store.dispatch("setModalView", "login");
+      }, 300);
     }
   }
 };

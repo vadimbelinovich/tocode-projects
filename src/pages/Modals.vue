@@ -2,7 +2,7 @@
   <div class="wrapper-content wrapper-content--fixed">
     <section>
       <div class="container">
-        <h1>Modals Page</h1>
+        <h1>Modals Page 1</h1>
         <section>
           <login-button title="Login Modal" type="login" />
         </section>

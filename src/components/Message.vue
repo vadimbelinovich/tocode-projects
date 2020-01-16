@@ -8,7 +8,7 @@
 export default {
   computed: {
     message() {
-      return this.$store.getters.getMessage;
+      return this.$store.getters.getWarning;
     }
   }
 };

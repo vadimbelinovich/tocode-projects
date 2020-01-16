@@ -32,7 +32,8 @@ export default {
     return {
       links: [
         { title: "Modals", url: "/" },
-        { title: "Notes", url: "/notes" }
+        { title: "Notes", url: "/notes" },
+        { title: "Notify", url: "/NotifyPage" }
       ]
     };
   }

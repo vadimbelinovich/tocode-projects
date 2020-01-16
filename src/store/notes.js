@@ -36,7 +36,6 @@ export default {
   mutations: {
     addNote(state, payload) {
       let { title, descr, edit, status } = payload;
-
       state.noteList.push({
         title,
         descr,
@@ -95,7 +94,7 @@ export default {
     getNote(state) {
       return state.note;
     },
-    getMessage(state) {
+    getWarning(state) {
       return state.message;
     },
     getStatus(state) {

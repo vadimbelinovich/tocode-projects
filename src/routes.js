@@ -8,6 +8,7 @@ Vue.use(Router);
 import Modals from "@/pages/Modals";
 import NotFound from "@/pages/404";
 import Notes from "@/pages/Notes";
+import Notify from "@/pages/NotifyPage";
 
 // Routering
 export default new Router({
@@ -22,6 +23,11 @@ export default new Router({
       path: "/notes",
       name: "Notes",
       component: Notes
+    },
+    {
+      path: "/NotifyPage",
+      name: "Notify",
+      component: Notify
     },
     {
       path: "*",

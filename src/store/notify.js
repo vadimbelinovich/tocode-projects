@@ -14,9 +14,40 @@ export default {
     },
     loadMessages(state, payload) {
       state.messagesMain = [...state.messagesMain, ...payload];
-    }
+    },
+    getMessagesEmpty(state) {
+      state.messages = [];
+    },
+    getMessagesMainEmpty(state) {
+      state.messagesMain = [];
+    },
+    pushMessages(state, payload) {
+      state.messages.push(payload)
+    },
+    pushMessagesMain(state, payload) {
+      state.messagesMain.push(payload)
+    },
   },
   actions: {
+    getNotify({ dispatch, commit }, payload) {
+      dispatch('changeLoading', true)
+      axios
+        .get('https://tocode.ru/static/c/vue-pro/notifyApi.php')
+          .then(response => {
+            let res = response.data.notify;
+            commit('getMessagesEmpty', res)
+            commit('getMessagesMainEmpty', res)
+            for (let i = 0; i < res.length; i++) {
+              if (res[i].main) commit('pushMessagesMain', res[i])
+              else commit('pushMessages', res[i])
+            }
+          })
+          .catch(error => {
+            console.log(error)
+            dispatch('changeError', 'Error: Network Error')
+          })
+          .finally( () => (dispatch('changeLoading', false)))
+    },
     setMessage({ commit }, payload) {
       commit("setMessage", payload);
     },
@@ -27,25 +58,6 @@ export default {
       let res = getters.getMessageFilter;
       commit("loadMessages", loadMore(res));
     },
-    getNotify({ dispatch }) {
-      dispatch('changeLoading', true)
-      axios
-        .get('https://tocode.ru/static/c/vue-pro/notifyApi.php')
-          .then(response => {
-            let res = response.data.notify;
-            state.messages = [];
-            state.messagesMain = [];
-            for (let i = 0; i < res.length; i++) {
-              if (res[i].main) state.messagesMain.push(res[i])
-              else state.messages.push(res[i])
-            }
-          })
-          .catch(error => {
-            console.log(error)
-            dispatch('changeError', 'Error: Network Error')
-          })
-          .finally( () => (dispatch('changeLoading', false)))
-    }
   },
   getters: {
     getMessage(state) {

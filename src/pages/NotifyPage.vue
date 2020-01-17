@@ -35,7 +35,6 @@
 <script>
 import axios from 'axios'
 import notify from '@/components/Notify.vue'
-// UI
 import preloader from '@/components/UI/Preloader.vue'
 
 export default {
@@ -63,18 +62,6 @@ export default {
     },
     getNotify () {
       this.$store.dispatch('getNotify')
-      // this.changeLoading(true)
-      // axios
-      //   .get('https://tocode.ru/static/c/vue-pro/notifyApi.php')
-      //     .then(response => {
-      //       let res = response.data.notify;
-      //       this.$store.dispatch('getNotify', res)
-      //     })
-      //     .catch(error => {
-      //       console.log(error)
-      //       this.changeError();
-      //     })
-      //     .finally( () => (this.changeLoading(false)))
     },
     changeLoading(boolean){
       this.$store.dispatch('changeLoading', boolean)

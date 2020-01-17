@@ -8,8 +8,8 @@ export default {
     }
   },
   actions: {
-    changeLoading({ dispatch }, payload) {
-      dispatch("changeLoading", payload);
+    changeLoading({ commit }, payload) {
+      commit("changeLoading", payload);
     }
   },
   getters: {

@@ -1,4 +1,5 @@
 import loadMore from "../assets/js/loadMore.js";
+import axios from 'axios'
 
 export default {
   state: {
@@ -33,20 +34,20 @@ export default {
       dispatch('changeLoading', true)
       axios
         .get('https://tocode.ru/static/c/vue-pro/notifyApi.php')
-          .then(response => {
-            let res = response.data.notify;
-            commit('getMessagesEmpty', res)
-            commit('getMessagesMainEmpty', res)
-            for (let i = 0; i < res.length; i++) {
-              if (res[i].main) commit('pushMessagesMain', res[i])
-              else commit('pushMessages', res[i])
-            }
-          })
-          .catch(error => {
-            console.log(error)
-            dispatch('changeError', 'Error: Network Error')
-          })
-          .finally( () => (dispatch('changeLoading', false)))
+        .then(response => {
+          let res = response.data.notify;
+          commit('getMessagesEmpty')
+          commit('getMessagesMainEmpty')
+          for (let i = 0; i < res.length; i++) {
+            if (res[i].main) commit('pushMessagesMain', res[i])
+            else commit('pushMessages', res[i])
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          dispatch('changeError', 'Error: Network Error')
+        })
+        .finally( () => (dispatch('changeLoading', false)))
     },
     setMessage({ commit }, payload) {
       commit("setMessage", payload);

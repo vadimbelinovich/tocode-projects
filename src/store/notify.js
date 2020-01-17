@@ -28,6 +28,12 @@ export default {
     },
   },
   actions: {
+    getNotifyLazy ({ dispatch }) {
+      dispatch('changeLoading', true)
+      setTimeout (() => {
+        dispatch('getNotify')
+      }, 1000)
+    },
     getNotify({ dispatch, commit }) {
       dispatch('changeLoading', true)
       axios

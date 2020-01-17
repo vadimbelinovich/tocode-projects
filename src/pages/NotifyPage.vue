@@ -55,10 +55,7 @@ export default {
   },
   methods: {
     getNotifyLazy () {
-      this.changeLoading(true)
-      setTimeout (() => {
-        this.getNotify()
-      }, 1000)
+      this.$store.dispatch('getNotifyLazy')
     },
     getNotify () {
       this.$store.dispatch('getNotify')
@@ -68,9 +65,6 @@ export default {
     },
     getLoading(){
       return this.$store.getters.getLoading
-    },
-    changeError(){
-      this.$store.dispatch('changeError', 'Error: Network Error')
     }
   }
 }

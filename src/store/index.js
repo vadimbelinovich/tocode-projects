@@ -8,6 +8,7 @@ import modal from "./modals";
 import notify from "./notify";
 import loading from "./loading";
 import error from "./error";
+import github from "./github";
 
 export default new Vuex.Store({
   modules: { 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     modal, 
     notify, 
     loading, 
-    error
+    error,
+    github
   }
 });

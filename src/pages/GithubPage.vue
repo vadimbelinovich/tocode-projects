@@ -38,20 +38,26 @@ import search from '@/components/Search.vue'
 import axios from 'axios'
 export default {
   components: { search },
-  computed: {
-    error() {
-      return this.$store.getters.getError
-    },
-    search() {
-      return this.$store.getters.getSearch
-    },
-    repos() {
-      return this.$store.getters.getRepos
+  data () {
+    return {
+      search: '',
+      error: null,
+      repos: null
     }
   },
   methods: {
     getRepos () {
-      this.$store.dispatch('setRepos')
+      axios
+        .get(`https://api.github.com/users/${this.search}/repos`)
+          .then(res => {
+            this.error = null
+            this.repos = res.data
+          })
+          .catch(err => {
+            console.log(err)
+            this.repos = null
+            this.error = 'Can`t find this user'
+          })
     }
   }
 }

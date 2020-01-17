@@ -18,8 +18,6 @@ export default {
     },
     getMessagesEmpty(state) {
       state.messages = [];
-    },
-    getMessagesMainEmpty(state) {
       state.messagesMain = [];
     },
     pushMessages(state, payload) {
@@ -30,14 +28,13 @@ export default {
     },
   },
   actions: {
-    getNotify({ dispatch, commit }, payload) {
+    getNotify({ dispatch, commit }) {
       dispatch('changeLoading', true)
       axios
         .get('https://tocode.ru/static/c/vue-pro/notifyApi.php')
         .then(response => {
           let res = response.data.notify;
           commit('getMessagesEmpty')
-          commit('getMessagesMainEmpty')
           for (let i = 0; i < res.length; i++) {
             if (res[i].main) commit('pushMessagesMain', res[i])
             else commit('pushMessages', res[i])

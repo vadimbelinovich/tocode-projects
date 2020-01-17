@@ -7,7 +7,7 @@ import store from "./store";
 
 Vue.use(Vuelidate);
 
-import "./assets/main.scss";
+import "./assets/scss/main.scss";
 
 Vue.component(
   "login-button",

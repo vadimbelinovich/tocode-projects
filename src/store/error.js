@@ -4,7 +4,7 @@ export default {
   },
   mutations: {
     changeError(state, payload) {
-      state.loading = payload;
+      state.error = payload;
     }
   },
   actions: {

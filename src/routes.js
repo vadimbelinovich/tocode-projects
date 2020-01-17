@@ -9,6 +9,7 @@ import Modals from "@/pages/Modals";
 import NotFound from "@/pages/404";
 import Notes from "@/pages/Notes";
 import Notify from "@/pages/NotifyPage";
+import Github from "@/pages/GithubPage";
 
 // Routering
 export default new Router({
@@ -28,6 +29,11 @@ export default new Router({
       path: "/NotifyPage",
       name: "Notify",
       component: Notify
+    },
+    {
+      path: "/GithubPage",
+      name: "Github",
+      component: Github
     },
     {
       path: "*",

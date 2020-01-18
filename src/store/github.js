@@ -12,7 +12,7 @@ export default {
   actions: {
     setRepos({dispatch, commit}){
       axios
-        .get(`https://api.github.com/users/${this.search}/repos`)
+        .get(`https://api.github.com/users/${state.search}/repos`)
         .then(res => {
           dispatch('changeError', null)
           commit('setRepos', res.data)

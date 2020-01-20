@@ -15,25 +15,49 @@
           @search="search = $event"/>
 
         <!-- buttons -->
-        <button v-if="!repos" class="btn btnPrimary" @click="getUser">Search!</button>
-        <button v-else class="btn btnPrimary" @click="getUser">Search Again!</button>
+        <button v-if="!repos" class="btn btnPrimary" @click="getData">Search!</button>
+        <button v-else class="btn btnPrimary" @click="getData">Search Again!</button>
 
         <!-- wrapper -->
         <div class="repos__wrapper" v-if="user">
           <!-- item -->
           <div class="user">
             <div class="pic">
-              <img :src="user.avatar_url" alt="">
-              <p class="name"> {{ user.name }} </p>
-              <span class="repos__count"> {{ user.public_repos }} </span>
+              <img :src="user.avatar_url" :alt="user.name">
             </div>
+            <p class="name">user: <b>{{ user.name }}</b> </p>
+            <span class="repos__count">repos: <b>{{ user.public_repos }}</b> </span>
           </div>
-          <div class="repos-item" v-for="repo in repos" :key="repo.id">
-            <div class="repos-info">
-              <a class="link" target="_blank" :href="repo.html_url">{{ repo.name }}</a>
-              <span> {{ repo.stargazers_count }} ⭐</span>
+
+          <table>
+            <!-- head -->
+            <thead>
+              <tr>
+                <th @click="sort('name')">repo &#8595;</th>
+                <th @click="sort('stargazers_count')">Stars &#8595;</th>
+              </tr>
+            </thead>
+
+            <!-- body -->
+            <tbody>
+              <tr class="repos-item" v-for="repo in repoSort" :key="repo.id">
+                <td>
+                  <a class="link" target="_blank" :href="repo.html_url">{{ repo.name }}</a>
+                </td>
+                <td> {{ repo.stargazers_count }} ⭐</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- buttons -->
+          <section>
+            <div class="container">
+              <div class="button-list">
+                <div class="btn btnPrimary" @click="prevPage">&#8592;</div>
+                <div class="btn btnPrimary" @click="nextPage">&#8594;</div>
+              </div>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </section>
@@ -49,45 +73,76 @@ export default {
     return {
       search: '',
       error: null,
-      repos: null,
+      repos: [],
       user: null,
-      link: 'https://api.github.com/users'
+      currentSort: 'name',
+      currentSortDir: "asc",
+      link: 'https://api.github.com/users',
+      page: {
+        current: 1,
+        length: 4
+      }
+    }
+  },
+  computed: {
+    repoSort() {
+      return this.repos
+        .sort((a, b) => {
+          let mod = 1;
+          if (this.currentSortDir === "desc") mod = -1;
+          if (a[this.currentSort] < b[this.currentSort]) return -1 * mod;
+          if (a[this.currentSort] > b[this.currentSort]) return 1 * mod;
+          return 0;
+        })
+        .filter((row, index) => {
+          let start = (this.page.current - 1) * this.page.length;
+          let end = this.page.current * this.page.length;
+          if (index >= start && index < end) return true;
+        });
     }
   },
   methods: {
-    getUser () {
+    async getData () {
+      try{
+        await Promise.all([this.getUser(), this.getRepo()])
+      } catch(err) {
+        console.log(err)
+        this.user = null
+        this.error = 'Can`t find this user'
+      }
+    },
+    getUser() {
       axios
-        .get(`https://api.github.com/users/${this.search}`)
+        .get(`${this.link}/${this.search}`)
         .then(res => {
           this.error = null
           this.user = res.data
-          axios
-            .get(`https://api.github.com/users/${this.search}/repos`)
-            .then(res => {
-              this.repos = res.data
-            })
+          console.log(this.user);
         })
-        .catch(err => {
-          console.log(err)
-          this.user = null
-          this.error = 'Can`t find this user'
+    },
+    getRepo() {
+      axios
+        .get(`${this.link}/${this.search}/repos`)
+        .then(res => {
+          this.error = null
+          this.repos = res.data
+          console.log(this.repos);
         })
+    },
+    sort(e) {
+      if (e === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      } else this.currentSort = e;
+      this.page.current = 1
+    },
+    // Pagination
+    prevPage() {
+      if (this.page.current > 1) this.page.current -= 1;
+    },
+    nextPage() {
+      if (this.page.current * this.page.length < this.repos.length)
+        this.page.current += 1;
     }
-    // getRepos () {
-    //   axios
-    //     .get(`${this.link}/${this.search}/repos`)
-    //     .then(res => {
-    //       this.error = null
-    //       this.repos = res.data
-    //       console.log(res.data);
-    //     })
-    //     .catch(err => {
-    //       console.log(err)
-    //       this.repos = null
-    //       this.error = 'Can`t find this user'
-    //     })
-    // },
-    
   }
 }
 </script>
@@ -104,6 +159,18 @@ button {
 .repos__wrapper {
   width: 400px;
   margin: 30px 0;
+  & .user{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    & .pic{
+      max-width: 50px;
+      & img{
+        max-width: 100%;
+      }
+    }
+  }
 }
 .repos-info {
   display: flex;
@@ -112,5 +179,43 @@ button {
   margin-bottom: 10px;
   padding: 10px 0;
   border-bottom: 1px solid #dbdbdb;
+}
+
+table {
+  & thead{
+    & tr{
+      & th{
+        padding: 0;
+        &:last-child{
+          text-align: center;
+        }
+      }
+    }
+  }
+  & tbody{
+    & tr {
+      box-shadow: none;
+      background-color: transparent;
+      & td{
+        padding: 0;
+        &:last-child{
+          text-align: center;
+        }
+      }
+      &:hover{
+        box-shadow: none;
+        transform: none;
+      }
+    }
+  }
+} 
+.button-list {
+  width: 100%;
+  text-align: center;
+
+  .btn {
+    border-radius: 60px;
+    margin: 0 20px;
+  }
 }
 </style>
